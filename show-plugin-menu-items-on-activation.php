@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Show Plugin Menu Items on Activation
- * Plugin URI:  https://github.com/kellenmace/Show-Plugin-Menu-Items-on-Activation
+ * Plugin URI:  https://github.com/kellenmace/show-plugin-menu-items-on-activation
  * Description: Identify any newly added menu items on plugin activation.
  * Version:     1.0.0
  * Author:      Kellen Mace
