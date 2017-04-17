@@ -1,5 +1,5 @@
 === Show Plugin Menu Items on Activation ===
-Contributors: kellenmace
+Contributors: kellenmace, binarygary
 Tags: plugin,new,add,menu,sidebar,activate,activation
 Donate link: https://www.paypal.me/kellenmace/
 Requires at least: 3.3

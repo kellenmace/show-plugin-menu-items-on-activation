@@ -205,15 +205,40 @@ final class SPMIOA_Show_Plugin_Menu_Items {
 
 		$new_menu_items = $this->get_new_menu_items( $menu );
 
+		// Loop through and add each new menu item to the formatted array.
 		foreach ( $new_menu_items as $new_menu_item ) {
-
-			// Store new menu items in class property.
-			$this->new_menu_items_formatted[] = array(
-				'menu_title'   => $new_menu_item[0],
-				'menu_slug'    => $new_menu_item[2],
-				'list_item_id' => sanitize_title_with_dashes( $new_menu_item[5] ),
-			);
+			$this->maybe_add_menu_item_to_formatted_array( $new_menu_item );
 		}
+	}
+
+	/**
+	 * Add new menu item to formatted array if it has the required data.
+	 *
+	 * @since  1.0.0
+	 * @param  array $new_menu_item The new menu item data.
+	 */
+	private function maybe_add_menu_item_to_formatted_array( $new_menu_item ) {
+
+		if ( ! $this->does_menu_item_have_the_required_data( $new_menu_item ) ) {
+			return;
+		}
+
+		$this->new_menu_items_formatted[] = array(
+			'menu_title'   => $new_menu_item[0],
+			'menu_slug'    => $new_menu_item[2],
+			'list_item_id' => sanitize_title_with_dashes( $new_menu_item[5] ),
+		);
+	}
+
+	/**
+	 * Does this menu item have the required data?
+	 *
+	 * @since  1.0.0
+	 * @param  array $new_menu_item The new menu item data.
+	 * @return bool                 Whether this menu item has the required data.
+	 */
+	private function does_menu_item_have_the_required_data( $new_menu_item ) {
+		return $new_menu_item[0] && $new_menu_item[2] && $new_menu_item[5];
 	}
 
 	/**
@@ -276,14 +301,45 @@ final class SPMIOA_Show_Plugin_Menu_Items {
 
 			// Loop through and add each new submenu item to the formatted array.
 			foreach ( $new_submenu_items as $position => $submenu_item ) {
-
-				$this->new_submenu_items_formatted[] = array(
-					'menu_title'          => $submenu_item[0],
-					'parent_menu_title'   => $this->get_parent_menu_title( $parent_slug ),
-					'parent_list_item_id' => $this->get_parent_list_item_id( $parent_slug ),
-				);
+				$this->maybe_add_submenu_item_to_formatted_array( $submenu_item, $parent_slug );
 			}
 		}
+	}
+
+	/**
+	 * Add new submenu item to formatted array if it has the required data.
+	 *
+	 * @since  1.0.0
+	 * @param  array  $submenu_item The submenu item data.
+	 * @param  string $parent_slug  The slug of the submenu item's parent menu item.
+	 */
+	private function maybe_add_submenu_item_to_formatted_array( $submenu_item, $parent_slug ) {
+
+		$parent_menu_title   = $this->get_parent_menu_title( $parent_slug );
+		$parent_list_item_id = $this->get_parent_list_item_id( $parent_slug );
+
+		if ( ! $this->does_submenu_item_have_the_required_data( $submenu_item, $parent_menu_title, $parent_list_item_id ) ) {
+			return;
+		}
+
+		$this->new_submenu_items_formatted[] = array(
+			'menu_title'          => $submenu_item[0],
+			'parent_menu_title'   => $parent_menu_title,
+			'parent_list_item_id' => $parent_list_item_id,
+		);
+	}
+
+	/**
+	 * Does this submenu item have the required data?
+	 *
+	 * @since  1.0.0
+	 * @param  array  $submenu_item        The new submenu item data.
+	 * @param  string $parent_menu_title   The title of the submenu item's parent menu item.
+	 * @param  string $parent_list_item_id The list item ID of the submenu item's parent menu item.
+	 * @return bool                        Whether this menu item has the required data.
+	 */
+	private function does_submenu_item_have_the_required_data( $submenu_item, $parent_menu_title, $parent_list_item_id ) {
+		return $submenu_item[0] && $parent_menu_title && $parent_list_item_id;
 	}
 
 	/**
